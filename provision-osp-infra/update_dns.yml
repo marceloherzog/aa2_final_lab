@@ -1,0 +1,60 @@
+---
+- hosts: localhost
+  become: true
+  vars:
+    guid: "{{ lookup('ENV','GUID') }}"
+  tasks:
+    - name: Delete ansible hosts
+      become: true
+      when: inventory_update | default(true) | bool
+      file:
+        path: /etc/ansible/hosts
+        state: absent
+
+    - meta: refresh_inventory
+
+
+    - name: Include vars
+      include_vars: instances_vars.yml
+
+    - name: gather facts
+      os_server_info:
+        cloud: "{{ guid }}-project"
+      register: osp_instances
+
+
+    - name: Create in-memory inventory
+      add_host:
+        name: "{{ __instance.name }}"
+        group: "{{ __instance.metadata.AnsibleGroup }}"
+        ansible_host: "{{ __instance.private_v4 }}" 
+        ansible_ssh_private_key_file: f553key.pub
+        ansible_user: cloud-user
+      loop: "{{ osp_instances.openstack_servers }}"
+      loop_control:
+        loop_var: __instance
+
+    - name: Ansible inventory update
+      when: inventory_update | default(true) | bool
+      block:
+        - name: Copy ansible hosts
+          become: true
+          template:
+            src: templates/hosts.j2
+            dest: /etc/ansible/hosts
+            mode: 0644
+
+
+    - name: DNS pod record update
+      become: true
+      when: dns_record_update | default(true) | bool
+      block:
+        - name: Copy dns records
+          template:
+            src: templates/example.com.zone.j2
+            dest: "{{ dns_zone_file | default('/srv/bind/var/named/example.com.zone') }}"
+
+        - name: restart_dns_pod
+          command: podman restart bind9-dns
+
+

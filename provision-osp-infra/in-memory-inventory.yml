@@ -4,7 +4,7 @@
   connection: local
   gather_facts: false
   vars:
-    guid: f553
+    guid: "f553"
     home: "{{ lookup('ENV','HOME') }}"
     internal_domain: "example.com"
   tasks:

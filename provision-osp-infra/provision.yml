@@ -4,14 +4,14 @@
   connection: local
   gather_facts: false
   vars:
-    guid: "{{ lookup('ENV','GUID') }}"
+    guid: f553
   tasks:
     - name: Include Instance variables
       include_vars: instances_vars.yml
 
     - name: Create Instance
       openstack.cloud.server:
-        cloud: "{{ GUID }}-project"
+        cloud: "{{ guid }}-project"
         name: "{{ instance.name }}"
         image: "{{ instance.image }}"
         key_name: "{{ instance.keypair }}"

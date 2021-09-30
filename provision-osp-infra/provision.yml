@@ -10,7 +10,7 @@
       include_vars: instances_vars.yml
 
     - name: Create Instance
-      openstack.cloud.project:
+      openstack.cloud.server:
         cloud: f553-project
         name: "{{ instance.name }}"
         image: "{{ instance.image }}"

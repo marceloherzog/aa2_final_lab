@@ -1,0 +1,17 @@
+[load_balancers]
+lb  ansible_ssh_host=lb.f553.example.com
+
+[app_servers]
+app1  ansible_ssh_host=app1.f553.example.com
+app2  ansible_ssh_host=app2.f553.example.com
+
+[database_servers]
+db ansible_ssh_host=db.example.com
+
+[internal:children]
+load_balancers
+app_servers
+database_servers
+
+[all:vars]
+GUID=f553

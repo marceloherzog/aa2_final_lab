@@ -4,23 +4,6 @@
   vars:
     satellite_activationkey: gpte-labs-rhel8
     satellite_org: prod
-    ipdns: 192.168.50.47
-  tasks:
-    - name: DNS IP updated
-      lineinfile:
-        state: present
-        path: /etc/sysconfig/network-scripts/ifcfg-eth0
-        line: "{{ item }}"
-      loop:
-        - PEERDNS=no
-        - DNS1= "{{ ipdns }}"
-      register: network_update
-
-    - name: restart network manager
-      service:
-        name: NetworkManager
-        state: restarted
-      when: network_update.changed | bool
 
     - name: install katello-ca-consumer package
       yum:

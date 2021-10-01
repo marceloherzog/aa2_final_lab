@@ -6,4 +6,4 @@
   tasks:
       - name: Setup PostgreSQL
         include_role:
-          name: postgres
+          name: database

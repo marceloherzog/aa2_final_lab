@@ -4,6 +4,7 @@
   vars:
     satellite_activationkey: gpte-labs-rhel8
     satellite_org: prod
+    ipdns: 192.168.50.47
   tasks:
     - name: DNS IP updated
       lineinfile:
@@ -12,7 +13,7 @@
         line: "{{ item }}"
       loop:
         - PEERDNS=no
-        - DNS1={{ hostvars.localhost.ansible_default_ipv4.address }}
+        - DNS1= "{{ ipdns }}"
       register: network_update
 
     - name: restart network manager

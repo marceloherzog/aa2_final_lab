@@ -4,6 +4,7 @@
   vars:
     satellite_activationkey: gpte-labs-rhel8
     satellite_org: prod
+  tasks:
 
     - name: install katello-ca-consumer package
       yum:

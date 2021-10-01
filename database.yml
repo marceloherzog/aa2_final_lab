@@ -3,7 +3,7 @@
   hosts: database_servers
   become: true
   gather_facts: false
-  tags:
-    - database_servers
-  roles:
-    - database
+  tasks:
+      - name: Setup PostgreSQL
+        include_role:
+          name: postgres

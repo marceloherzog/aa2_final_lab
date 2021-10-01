@@ -14,13 +14,19 @@
   hosts: load_balancers,backend_servers,database_servers
   become: true
   tasks:
+
+    - name: Get control node network settings
+      ansible.builtin.setup:
+        filter: ansible_default_ipv4
+      delegate_facts: true
+      delegate_to: control
+
     - name: Insert DNS IP
       command: >-
         nmcli connection modify "System eth0"
         ipv4.ignore-auto-dns yes
-        ipv4.dns {{ ansible_default_ipv4.address }}
-        +ipv4.dns {{ ansible_dns.nameservers.0 }}
-        +ipv4.dns 8.8.8.8
+        ipv4.dns {{ hostvars.control.ansible_default_ipv4.adress }}
+        ipv4.dns-search {{ domain }}
     
     - name: Restart NetworkManager
       service:

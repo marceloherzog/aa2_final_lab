@@ -1,6 +1,6 @@
 ---
 - name: Deploy, configure, and populate flask repo and virtualenv
-  hosts: all
+  hosts: database_servers
   become: true
   gather_facts: false
   tags:

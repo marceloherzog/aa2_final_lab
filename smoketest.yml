@@ -20,7 +20,7 @@
         - smoketest
 
 - name: End to end smoke tests
-  hosts: back_servers
+  hosts: backend_servers
   become: false
   gather_facts: false
   tags:

@@ -1,5 +1,5 @@
 - name: Deploy haproxy load balancer
-  hosts: all
+  hosts: load_balancers
   gather_facts: false 
   become: true
   tags:
